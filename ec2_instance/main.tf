@@ -1,17 +1,21 @@
 terraform {
-    required_providers {
-      aws = {
-        source = "hashicorp/aws"
-        version = "~> 6.0"
-      }
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
     }
+  }
 
   backend "s3" {
-    bucket = "terraform-semikabucket"
-    key    = "ec2_instance/terraform.tfstate"
-    region = "us-east-1"
+    bucket       = "terraform-semikabucket"
+    key          = "ec2_instance/terraform.tfstate"
+    region       = "us-east-1"
     use_lockfile = true
   }
+}
+
+provider "aws" {
+  region = "us-east-1"
 }
 
 data "aws_vpc" "semika-vpc" {
@@ -43,7 +47,7 @@ resource "aws_security_group" "semika_security" {
   description = "semikasecurity_ec2"
   vpc_id      = data.aws_vpc.semika-vpc.id
 
-  tags = merge(local.common-tags, {Name: "${local.name-prefix}-semika_security"})
+  tags = merge(local.common-tags, { Name = "${local.name-prefix}-semika_security" })
 }
 
 resource "aws_vpc_security_group_ingress_rule" "ssh_rule" {
@@ -76,11 +80,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_icmp" {
   to_port           = -1
 }
 
-provider "aws" {
-  region = "us-east-1"
-}
-
-resource "aws_iam_role" "ec2_s3_role" {
+resource "aws_iam_role" "semika_roles" {
   name = "${local.name-prefix}ec2-s3-role"
 
   assume_role_policy = jsonencode({
@@ -96,35 +96,35 @@ resource "aws_iam_role" "ec2_s3_role" {
     ]
   })
 
-  tags = merge(local.common-tags, {Name: "${local.name-prefix}ec2-s3-role"})
+  tags = merge(local.common-tags, { Name = "${local.name-prefix}ec2-s3-role" })
 }
 
-resource "aws_iam_instance_profile" "ec2_profile" {
+resource "aws_iam_instance_profile" "semika_roles_profile" {
   name = "${local.name-prefix}ec2-profile"
-  role = aws_iam_role.ec2_s3_role.name
+  role = aws_iam_role.semika_roles.name
 
-  tags = merge(local.common-tags, {Name: "${local.name-prefix}ec2-profile"})
+  tags = merge(local.common-tags, { Name = "${local.name-prefix}ec2-profile" })
 }
 
 resource "aws_instance" "myinstance" {
-  ami = "ami-05ffe3c48a9991133"
-  instance_type = "t2.micro"
+  ami                         = "ami-05ffe3c48a9991133"
+  instance_type               = "t2.micro"
   associate_public_ip_address = true
 
   subnet_id              = data.aws_subnet.semika-subnet.id
   vpc_security_group_ids = [aws_security_group.semika_security.id]
   key_name               = "deploy"
-  iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
+  iam_instance_profile   = aws_iam_instance_profile.semika_roles_profile.name
 
-  tags = merge(local.common-tags, {Name: "${local.name-prefix}-EC2"})
+  tags = merge(local.common-tags, { Name = "${local.name-prefix}-EC2" })
 }
 
 output "ec2_arn" {
-  value = aws_instance.myinstance.arn
+  value       = aws_instance.myinstance.arn
   description = "The arn of the EC2 instance"
 }
 
 output "ec2_role_arn" {
-  value = aws_iam_role.ec2_s3_role.arn
+  value       = aws_iam_role.semika_roles.arn
   description = "The ARN of the IAM role assumed by the EC2 instance"
 }
