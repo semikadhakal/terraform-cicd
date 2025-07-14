@@ -1,4 +1,6 @@
 terraform {
+  required_version = ">= 1.12.2"
+  
   backend "s3" {
     bucket       = "tfbucketsemika"
     key          = "s3_bucket/terraform.tfstate"
