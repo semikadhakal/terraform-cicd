@@ -1,4 +1,4 @@
-name: sujansapkota - Terraform CI Workflow
+name: semika- Terraform CI Workflow
 on:
   pull_request:
     branches: [main]
