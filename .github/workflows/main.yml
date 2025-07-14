@@ -1,4 +1,4 @@
-name: semika - Terraform CI Workflow
+name: sujansapkota - Terraform CI Workflow
 on:
   pull_request:
     branches: [main]
@@ -43,8 +43,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} -------
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} -------
           aws-region: us-east-1
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -106,8 +106,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} 
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} -------
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} -------
           aws-region: us-east-1
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -144,7 +144,7 @@ jobs:
         if: github.event_name == 'pull_request' && github.base_ref == 'dev'
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GH_PAT_TOKEN }} 
+          github-token: ${{ secrets.GH_PAT_TOKEN }} -------
           script: |
             const fs = require('fs');
             const plan = fs.readFileSync('s3-project/tfplan.txt', 'utf8');
@@ -207,3 +207,9 @@ jobs:
         with:
           name: s3-project-${{ steps.commit.outputs.hash }}
           path: s3-project-${{ steps.commit.outputs.hash }}.tar.gz
+
+
+
+
+
+

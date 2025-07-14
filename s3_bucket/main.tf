@@ -29,7 +29,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "mybucket" {
-  bucket        = "tfbucketsemika"
+  bucket        = "tfbucketsemika123"
   force_destroy = true
 
   tags = merge(local.common-tags, { Name : "${local.name-prefix}-tf-bucket" })
