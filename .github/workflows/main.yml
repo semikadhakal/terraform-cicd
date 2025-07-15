@@ -7,7 +7,6 @@ on:
     branches:
       - main
 jobs:
-  ## === EC2 JOBS ===
   lint-ec2:
     name: EC2 Terraform Lint
     runs-on: ubuntu-latest
@@ -101,7 +100,7 @@ jobs:
               repo: context.repo.repo,
               body: ## Terraform Plan Output for \ec2_instance\\n\n\\\hcl\n${planOutput}\n\\\``
             });
-  ## === S3 JOBS ===
+  
   lint-s3:
     name: S3 Terraform Lint
     runs-on: ubuntu-latest

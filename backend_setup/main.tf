@@ -29,10 +29,8 @@ resource "aws_s3_bucket_versioning" "bucket_versioning_semika-lf" {
   }
 }
 
-# Get current AWS caller identity to use your account ID and user ARN
 data "aws_caller_identity" "current" {}
 
-# S3 bucket policy to restrict access to only you
 resource "aws_s3_bucket_policy" "terraform_state_bucket_policy" {
   bucket = aws_s3_bucket.terraform_state_bucket.id
 
@@ -76,7 +74,6 @@ resource "aws_s3_bucket_policy" "terraform_state_bucket_policy" {
   })
 }
 
-# Block all public access to ensure security
 resource "aws_s3_bucket_public_access_block" "terraform_state_bucket_pab" {
   bucket = aws_s3_bucket.terraform_state_bucket.id
 
