@@ -1,6 +1,6 @@
 locals {
-    name-prefix = "safal-"
+    name-prefix = "semika"
   common-tags = {
-    Creator = "Safal Karki"
+    Creator = "semika"
   }
 }
